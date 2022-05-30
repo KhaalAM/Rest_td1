@@ -2,6 +2,7 @@ package com.inti.Rest_TD1.controller;
 
 import java.util.List;
 
+import com.inti.Rest_TD1.Repository.EcoleRepository;
 import com.inti.Rest_TD1.Repository.EtudiantRepository;
 import com.inti.Rest_TD1.model.Etudiant;
 import com.inti.Rest_TD1.model.Utilisateur;
@@ -27,6 +28,9 @@ public class EtudiantController {
 	@Autowired
 	Etudiant etudiant;
 	
+	@Autowired
+	Ecole ecole;
+	
 	@GetMapping("/test")
 	public String hello()
 	{
@@ -42,18 +46,18 @@ public class EtudiantController {
 	}
 	
 	
-	@PostMapping("saveEtudiant")
+	@PostMapping("/saveEtudiant")
 	public ResponseEntity<Etudiant> saveStudent(@RequestBody Etudiant etudiant)
 	{
 		return new ResponseEntity<Etudiant>(etudiantRepository.save(etudiant),HttpStatus.CREATED);
 	}
 	
 	
-	@PutMapping("updateEtudiant/{id}")
+	@PutMapping("/updateEtudiant/{id}")
 	public String updateEtudiant(@RequestBody Etudiant etudiant, @PathVariable int id)
 	{
 		Etudiant e1 = etudiantRepository.getById(id);
-	if (!e1.getNom().equals(etudiant).getNom())
+	if ((!e1.getNom().equals(etudiant).getNom()))
 	{
 		e1.setNom(etudiant.getNom());
 	}
@@ -69,7 +73,14 @@ public class EtudiantController {
 	}
 	
 	
-	
+	@PutMapping("/updateEtudiantWithSchool/{idEtudiant}/{idEcole}")
+	public String updateEtudiant(@RequestBody Etudiant etudiant, @PathVariable int id)
+	{
+		Ecole ecole=EcoleRepository.getReferenceById(idEcole);
+		etudiant.setEcole(ecole);
+		etudiantRepository.save(etudiant);
+		return "etudiant "+ etudiant+"a ete mis a jour";
+	}
 	
 	
 	@DeleteMapping("/deleteEtudiant")

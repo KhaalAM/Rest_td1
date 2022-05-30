@@ -15,15 +15,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@Entity
-@Table
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
-public class Ecole {
 
-	
+	@Entity
+	@Table
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@RequiredArgsConstructor
+	public class Ecole {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idEco;
@@ -32,7 +31,10 @@ public class Ecole {
 	private String cp;
 	private String ville;
 	
-@OneToMany(mappedBy="Ecole",targetEntity = Etudiant.class, cascade = cascadeType.All);
-private List<Etudiant>listEtudiant;
+	@OneToMany(mappedBy="Ecole",targetEntity = Etudiant.class,cascade = CascadeType.ALL)
+	private List<Etudiant>listEtudiant;
+	
+	@OneToMany(mappedBy = "Ecole",targetEntity = Professeur.class,cascade = CascadeType.ALL)
+	private List<Professeur>listProfesseur;
 	
 }

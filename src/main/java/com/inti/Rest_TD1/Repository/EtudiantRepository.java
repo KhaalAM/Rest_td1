@@ -14,5 +14,5 @@ public interface EtudiantRepository extends JpaRepository<Etudiant,Integer> {
 
 	public List<Etudiant> findAll();
 	
-	
+	findByEmail
 }
