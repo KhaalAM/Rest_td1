@@ -20,76 +20,80 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class EtudiantController {
 
-	@Autowired
-	EtudiantRepository etudiantRepository;
-	@Autowired
-	Etudiant etudiant;
-	
-	@Autowired
-	Ecole ecole;
-	
-	@GetMapping("/test")
-	public String hello()
-	{
-		return "Hello World";
-	}
-	
-	@GetMapping("/student")
-	public ResponseEntity<List<Etudiant>>getAllStudent()
-	{
-		return new ResponseEntity<Etudiant>(etudiantRepository.findAll(),HttpStatus.OK);
-		
-		
-	}
-	
-	
-	@PostMapping("/saveEtudiant")
-	public ResponseEntity<Etudiant> saveStudent(@RequestBody Etudiant etudiant)
-	{
-		return new ResponseEntity<Etudiant>(etudiantRepository.save(etudiant),HttpStatus.CREATED);
-	}
-	
-	
-	@PutMapping("/updateEtudiant/{id}")
-	public String updateEtudiant(@RequestBody Etudiant etudiant, @PathVariable int id)
-	{
-		Etudiant e1 = etudiantRepository.getById(id);
-	if ((!e1.getNom().equals(etudiant).getNom()))
-	{
-		e1.setNom(etudiant.getNom());
-	}
-		
-	if (!e1.getPrenom().equals(etudiant.getPrenom())&& etudiant.getPrenom()!=null)
-	{
-		e1.setPrenom(etudiant.getPrenom());
-	}
-	
-		
-		etudiantRepository.save(etudiant);
-		return "etudiant "+ etudiant+"a ete mis a jour";
-	}
-	
-	
-	@PutMapping("/updateEtudiantWithSchool/{idEtudiant}/{idEcole}")
-	public String updateEtudiant(@RequestBody Etudiant etudiant, @PathVariable int id)
-	{
-		Ecole ecole=EcoleRepository.getReferenceById(idEcole);
-		etudiant.setEcole(ecole);
-		etudiantRepository.save(etudiant);
-		return "etudiant "+ etudiant+"a ete mis a jour";
-	}
-	
-	
-	@DeleteMapping("/deleteEtudiant")
-	public ResponseEntity<List<Etudiant> deleteEtudiant(@RequestParam("id") int id)
-	{
-		return new ResponseEntity<Etudiant>(etudiantRepository.delete(id),HttpStatus.NO_CONTENT);
 
+	import com.inti.TD1Rest.model.Ecole;
+	import com.inti.TD1Rest.model.Etudiant;
+	import com.inti.TD1Rest.repository.EcoleRepository;
+	import com.inti.TD1Rest.repository.EtudiantRepository;
+
+	@RestController
+	public class EtudiantController
+	{
+		@Autowired
+		EtudiantRepository etudiantRepository;
+		
+		@Autowired
+		EcoleRepository ecoleRepository;
+		
+		@GetMapping("/students")
+		public ResponseEntity<List<Etudiant>> getAllStudents()
+		{
+			return new ResponseEntity<List<Etudiant>>(etudiantRepository.findAll(), HttpStatus.OK);
+		}
+		
+		@PostMapping("/saveStudent")
+		public ResponseEntity<Etudiant> saveStudent(@RequestBody Etudiant etudiant)
+		{
+			return new ResponseEntity<Etudiant>(etudiantRepository.save(etudiant), HttpStatus.CREATED);
+		}
+		
+		@PutMapping("/updateStudent/{id}")
+		public String updateStudent(@RequestBody Etudiant etudiant, @PathVariable int id)
+		{
+			Etudiant e1 = etudiantRepository.getReferenceById(id);
+			
+			if(!e1.getNom().equals(etudiant.getNom()))
+			{
+				e1.setNom(etudiant.getNom());
+			}
+			
+			if(!e1.getPrenom().equals(etudiant.getPrenom()) && etudiant.getPrenom() != null)
+			{
+				e1.setPrenom(etudiant.getPrenom());
+			}		
+			
+			etudiantRepository.save(e1);
+			
+			return "The student : " + e1 + " has been updated";
+		}
+		
+		@PutMapping("/updateStudentWithSchool/{idEtudiant}/{idEcole}")
+		public String updateStudentWithSchool(@RequestBody Etudiant etudiant, @PathVariable int idEtudiant, @PathVariable int idEcole)
+		{
+			Ecole ecole = ecoleRepository.getReferenceById(idEcole);
+			
+			etudiant.setEcole(ecole);
+			
+			etudiantRepository.save(etudiant);
+			
+			return "The student : " + etudiant + " has been updated";
+		}
+		
+		@DeleteMapping("/deleteStudent")
+		public String deleteStudent(@RequestParam("id") int id)
+		{
+			etudiantRepository.deleteById(id);
+			return "Student deleted";
+		}
+		
+
+	@GetMapping("listStudentBySchool/{idEcole}")
+	public ResponseEntity<Lis<Ecole> >listStudentBySchool(@RequestPath Etudiant etudiant)
+	{
+		return
 	}
-	
+
 	
 //	@RequestMapping(value="/Etudiants", method=RequestMethod.GET)
 //	public List<Etudiant> getAll
@@ -114,7 +118,11 @@ public class EtudiantController {
 	}
 	
 	
-	
+	@GetMapping("/studentsInLyon")
+	public ResponseEntity<List<Etudiant>>getAllStudentsInLyon()
+	{
+		return new ResponseEntity<List<Etudiant>>(etudiantRepository.findByVille(),HttpStatus.OK);
+	}
 	
 	
 	

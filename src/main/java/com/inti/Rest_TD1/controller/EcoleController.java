@@ -2,6 +2,7 @@ package com.inti.Rest_TD1.controller;
 
 import java.util.List;
 
+import com.inti.Rest_TD1.Repository.EcoleRepository;
 import com.inti.Rest_TD1.Repository.EtudiantRepository;
 import com.inti.Rest_TD1.model.Ecole;
 import com.inti.Rest_TD1.model.Etudiant;
@@ -64,6 +65,12 @@ public class EcoleController {
 	}
 	
 	
+	
+	@GetMapping ("/schoolByEmail/{email}")
+	public Ecole getSchoolByEmail(@PathVariable String email)
+	{
+		return ecoleRepository.findSchoolByEmail(email);
+	}
 	
 	
 	

@@ -43,7 +43,7 @@ public class Etudiant {
 	
 	@JoinTable(name="Professeur_Etudiant",
 	 	joinColumns=@JoinColumn(name="idP"),
-	 	inverseJoinColumns=@JoinColumn(name="idEco"))
+	 	inverseJoinColumns=@JoinColumn(name="idEcole"))
 	
 	
 	
